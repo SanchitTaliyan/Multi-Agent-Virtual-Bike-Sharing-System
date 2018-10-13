@@ -34,7 +34,7 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 	@Override
 	public void action() 
 	{
-		System.out.println(this.station.getLocalName() + ": " + this.station.vehicles.toString());
+		System.out.println("This is station: " + this.station.getLocalName() + " - raw list of vehicles: " + this.station.vehicles.toString());
 		// Receive the message
 		msg=this.myAgent.blockingReceive(
 				MessageTemplate.and(
@@ -46,7 +46,7 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 		{
 			this.comment = msg.getEnvelope().getComments();
 			this.msgObject = (Capsule) msg.getContentObject();
-			
+			System.out.println("Station: " + this.station.getLocalName() + "received message from: "+ msg.getSender().getLocalName() + " - " + this.comment);
 			switch(this.comment)
 			{
 			case "pedirVehiculo":	//Un usuario pide: //object -> Capsule - string con tipo vehiculoPedido y string paradaDeseada
@@ -67,7 +67,7 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 				{
 					//Enviamos el vehiculo
 					msgObject = new Capsule(vehicle,null,null,null);
-					Utils.enviarMensaje(myAgent, "user", this.msgObject, "entregaVehiculo");
+					Utils.enviarMensaje(myAgent, "user" /*msg.getSender().getLocalName()*/, this.msgObject, "entregaVehiculo");
 					break;
 				}
 					
@@ -78,7 +78,7 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 				{
 					//Enviamos el vehiculo
 					msgObject = new Capsule(vehicle,null,null,null);
-					Utils.enviarMensaje(myAgent, "user", this.msgObject, "entregaVehiculo");
+					Utils.enviarMensaje(myAgent, "user" /*msg.getSender().getLocalName()*/, this.msgObject, "entregaVehiculo");
 					break;
 				}
 				
@@ -102,6 +102,7 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 							//Enviamos un mensaje de reserva (vehiculo deseado, parada actual, usuario que reserva)
 							msgObject = new Capsule(null, vehicleRequestType, this.station.getLocalName() , userRequest);
 							Utils.enviarMensaje(myAgent, alternativeStation, this.msgObject, "peticionReservaVehiculo");
+							System.out.println("Station: " + this.station.getLocalName() + " realiced a petition to " + alternativeStation + " user: " + userRequest + " vehicle: " + vehicleRequestType);
 							//Esperamos respuesta
 							msg=this.myAgent.blockingReceive(
 									MessageTemplate.and(
@@ -110,7 +111,7 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 									);
 							
 							this.comment = msg.getEnvelope().getComments();
-							System.out.println(" resultado : " + msg.getEnvelope().getComments() );
+							System.out.println("Resultado : " + alternativeStation + " - " + this.comment + " " + vehicleRequestType +" to " + userRequest );
 							if(this.comment.equals("vehiculoReservado"))
 								break;
 							else //if(this.comment.equals("vehiculoNoReservado"))
@@ -138,6 +139,7 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 			case "peticionReservaVehiculo": //Otra estacion realiza peticion reserva: Object -> String usuario que pide
 				boolean isReserved = this.station.reserveVehicle(msgObject.getUser(), msgObject.getVehicleType());
 				//TODO
+				System.out.println("Peticion de vehiculo : " + msg.getEnvelope().getComments() );
 				if(isReserved)
 					Utils.enviarMensaje(myAgent, msgObject.getStation(), this.msgObject, "vehiculoReservado");
 				else

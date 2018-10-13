@@ -5,6 +5,7 @@ import vehicleShareSystem.behaviours.CyclicBehaviourUser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import jade.content.lang.sl.SLCodec;
 import jade.core.Agent;
@@ -22,6 +23,7 @@ public class AgentUser extends Agent {
 	
 	public Vehicle vehicle;
 	public String desiredVehicle;
+	public ArrayList<String> vehicles;
 	
 	public String currentStation;
 	public String destinationStation;
@@ -34,11 +36,16 @@ public class AgentUser extends Agent {
 	
 	public void setup() 
 	{
+		vehicles = new ArrayList<String>();
+		vehicles.add("bici");
+		vehicles.add("patin");
+		
 		stations = new ArrayList<String>();
 		stations.add("StationA");
 		stations.add("StationB");
 		stations.add("StationC");
 		stations.add("StationD");
+		
 		
 		this.vehicle = null;
 		
@@ -73,6 +80,13 @@ public class AgentUser extends Agent {
 
 		if(getLocalName().equals("User1"))
 		{
+			sd = new ServiceDescription();
+			sd.setName("User1");
+			sd.setType("User1");
+			sd.addOntologies("ontologia");
+			sd.addLanguages(new SLCodec().getName());
+			dfd.addServices(sd);
+			
 			this.stablishCurrentStation("StationA");
 			this.stablishDesiredStation("StationB");
 			this.stablishDestinationStation("StationB");
@@ -81,6 +95,13 @@ public class AgentUser extends Agent {
 		
 		if(getLocalName().equals("User2"))
 		{
+			sd = new ServiceDescription();
+			sd.setName("User2");
+			sd.setType("User2");
+			sd.addOntologies("ontologia");
+			sd.addLanguages(new SLCodec().getName());
+			dfd.addServices(sd);
+			
 			this.stablishCurrentStation("StationB");
 			this.stablishDesiredStation("StationA");
 			this.stablishDestinationStation("StationA");
@@ -89,6 +110,13 @@ public class AgentUser extends Agent {
 		
 		if(getLocalName().equals("User3"))
 		{
+			sd = new ServiceDescription();
+			sd.setName("User3");
+			sd.setType("User3");
+			sd.addOntologies("ontologia");
+			sd.addLanguages(new SLCodec().getName());
+			dfd.addServices(sd);
+			
 			this.stablishCurrentStation("StationD");
 			this.stablishDesiredStation("StationB");
 			this.stablishDestinationStation("StationB");
@@ -97,6 +125,13 @@ public class AgentUser extends Agent {
 		
 		if(getLocalName().equals("User4"))
 		{
+			sd = new ServiceDescription();
+			sd.setName("User4");
+			sd.setType("User4");
+			sd.addOntologies("ontologia");
+			sd.addLanguages(new SLCodec().getName());
+			dfd.addServices(sd);
+			
 			this.stablishCurrentStation("StationB");
 			this.stablishDesiredStation("StationC");
 			this.stablishDestinationStation("StationC");
@@ -105,6 +140,13 @@ public class AgentUser extends Agent {
 		
 		if(getLocalName().equals("User5"))
 		{
+			sd = new ServiceDescription();
+			sd.setName("User5");
+			sd.setType("User5");
+			sd.addOntologies("ontologia");
+			sd.addLanguages(new SLCodec().getName());
+			dfd.addServices(sd);
+			
 			this.stablishCurrentStation("StationA");
 			this.stablishDesiredStation("StationC");
 			this.stablishDestinationStation("StationC");
@@ -123,6 +165,14 @@ public class AgentUser extends Agent {
 		this.currentStation = currentStation;
 	}
 	
+	public void stablishCurrentStation()
+	{
+		Random rand = new Random();
+		int index = rand.nextInt(stations.size());
+		
+		this.currentStation = stations.get(index);
+	}
+	
 	public void stablishDestinationStation(String destinationStation)
 	{
 		this.destinationStation = destinationStation;
@@ -130,7 +180,10 @@ public class AgentUser extends Agent {
 	
 	public void stablishDesiredStation()
 	{
-		//random;
+		Random rand = new Random();
+		int index = rand.nextInt(stations.size());
+		
+		this.desiredStation = stations.get(index);
 	}
 	
 	public void stablishDesiredStation(String desiredStation)
@@ -141,6 +194,11 @@ public class AgentUser extends Agent {
 	public String getDesiredStation()
 	{
 		return this.desiredStation;
+	}
+	
+	public String getCurrentStation()
+	{
+		return this.currentStation;
 	}
 	
 	public boolean arrivedToFinalStation()
@@ -156,6 +214,14 @@ public class AgentUser extends Agent {
 	public void stablishDesiredVehicle(String vehiculoDeseado)
 	{
 		this.desiredVehicle = vehiculoDeseado;
+	}
+	
+	public void stablishDesiredVehicle()
+	{
+		Random rand = new Random();
+		int index = rand.nextInt(vehicles.size());
+		
+		this.desiredStation = vehicles.get(index);
 	}
 	
 	public boolean hasVehicle()

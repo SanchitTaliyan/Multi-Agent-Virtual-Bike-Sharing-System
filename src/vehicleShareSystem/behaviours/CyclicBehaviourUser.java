@@ -42,18 +42,24 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 		if(this.user.arrivedToFinalStation())
 		{
 			System.out.println("I, " + this.user.getLocalName() + " arrived to Final station. ");
-			this.user.stablishDesiredVehicle("bici"); //Debería ser random //asignar funciones
-			this.user.stablishDesiredStation("StationA");
+			this.user.stablishDesiredVehicle();
+			this.user.stablishDesiredStation();
+			System.out.println("Now, " + this.user.getLocalName() + " now i want to go to " + this.user.getDesiredStation() + " by " + this.user.desiredVehicle);
+
+		}
+		else 
+		{
+			System.out.println("I'm " + this.user.getLocalName() + " Im on " + this.user.currentStation + " and I want to go to " + this.user.desiredStation + " by " + this.user.desiredVehicle);
 		}
 		
-		//Temporal
-		System.out.println("I'm " + this.user.getLocalName() + " Im on " + this.user.currentStation + " and I want to go to " + this.user.desiredStation + " by " + this.user.desiredVehicle);
 		this.mensaje=scanner.nextLine();
 		//temporal
 		
 		//realiza peticion
 		this.msgObject = new Capsule(null,"bici",this.user.getDesiredStation(),null);
-		Utils.enviarMensaje(myAgent, "user", this.msgObject, "pedirVehiculo");
+		Utils.enviarMensaje(myAgent, this.user.getCurrentStation(), this.msgObject, "pedirVehiculo");
+		System.out.println("I " + this.user.getLocalName() + " realiced a petition to " + this.user.getCurrentStation());
+		
 		
 		// Receive the message
 		ACLMessage msg=this.myAgent.blockingReceive(
@@ -66,6 +72,8 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 			this.comment = msg.getEnvelope().getComments();
 			this.msgObject = (Capsule) msg.getContentObject();
 			
+			System.out.println("The station " + msg.getSender().getLocalName() + " said " + this.comment);
+
 			switch(this.comment)
 			{
 			case "entregaVehiculo":
@@ -80,7 +88,7 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 				//devuelve el vehiculo
 				this.vehicleTemp = this.user.leaveVehicle();
 				msgObject = new Capsule(this.vehicleTemp,null, null, null);
-				Utils.enviarMensaje(myAgent, "user", this.msgObject, "entregaVehiculo");
+				Utils.enviarMensaje(myAgent, this.user.getCurrentStation(), this.msgObject, "entregaVehiculo");
 
 				//espera
 				this.user.waitSomeTime(2000);
@@ -101,7 +109,7 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 					//envia vehiculo
 					this.vehicleTemp = this.user.leaveVehicle();
 					msgObject = new Capsule(this.vehicleTemp,null, null, null);
-					Utils.enviarMensaje(myAgent, "user", this.msgObject, "entregaVehiculo");
+					Utils.enviarMensaje(myAgent, this.user.getCurrentStation(), this.msgObject, "entregaVehiculo");
 				}
 				
 				this.user.waitSomeTime(2000);

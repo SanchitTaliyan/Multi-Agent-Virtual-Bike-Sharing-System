@@ -237,16 +237,17 @@ public class AgentStation extends Agent
 	
 	public boolean reserveVehicle(String user, String vehicleType)
 	{
-		boolean isReserved = false;
+		
 		for (Vehicle v : this.vehicles) 
 		{
 			if(v.isReserved() == false && v.getType().equals(vehicleType))
 			{
-				isReserved = true;
+				
 				v.stablishReserve(user);
+				return true;
 			}
 		}	
-		return isReserved;
+		return false;
 	}
 // Operaciones Vehiculos
 	
