@@ -56,29 +56,33 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 
 				String userRequest = (String) msg.getSender().getLocalName();
 				String vehicleRequestType = msgObject.getVehicleType();
+				System.out.println(userRequest+vehicleRequestType);
 				String desiredStation = msgObject.getStation();
 				
 				Vehicle vehicle;
 				String alternativeStation=null;
 				
 			//1. miramos a ver si hay algun vehiculo reservado para userRequest
+				
 				vehicle = this.station.getVehicleReserved(userRequest);
 				if(vehicle != null)
 				{
 					//Enviamos el vehiculo
 					msgObject = new Capsule(vehicle,null,null,null);
-					Utils.enviarMensaje(myAgent, "user" /*msg.getSender().getLocalName()*/, this.msgObject, "entregaVehiculo");
+					Utils.enviarMensaje(myAgent,userRequest /*msg.getSender().getLocalName()*/, this.msgObject, "entregaVehiculo");
 					break;
 				}
 					
 				
 			//2. Miramos a ver si hay un vehiculo libre que coincida con peticion
+				
 				vehicle = this.station.getVehicle(vehicleRequestType);
 				if(vehicle != null)
 				{
+					
 					//Enviamos el vehiculo
 					msgObject = new Capsule(vehicle,null,null,null);
-					Utils.enviarMensaje(myAgent, "user" /*msg.getSender().getLocalName()*/, this.msgObject, "entregaVehiculo");
+					Utils.enviarMensaje(myAgent, userRequest /*msg.getSender().getLocalName()*/, this.msgObject, "entregaVehiculo");
 					break;
 				}
 				
@@ -126,9 +130,9 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 			//5. enviamos un mensaje encapsulado con estacion / vehiculo
 				msgObject = new Capsule(vehicle,null,alternativeStation,null);
 				if(alternativeStation == null)
-					Utils.enviarMensaje(myAgent, "user", this.msgObject, "entregaVehiculo");				//si vehiculo es null, no hay alternativo
+					Utils.enviarMensaje(myAgent, userRequest, this.msgObject, "entregaVehiculo");				//si vehiculo es null, no hay alternativo
 				else //si estacion es null, no se ha realizado reserva
-					Utils.enviarMensaje(myAgent, "user", this.msgObject, "pedidoNoSatisfacotrio");			//si vehiculo es null, no hay alternativo
+					Utils.enviarMensaje(myAgent,userRequest, this.msgObject, "pedidoNoSatisfacotrio");			//si vehiculo es null, no hay alternativo
 				break;
 				
 			case "entregaVehiculo":	//Un usuario deja su vehiculo: Object -> vehiculo

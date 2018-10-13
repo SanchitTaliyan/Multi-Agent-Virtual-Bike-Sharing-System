@@ -71,7 +71,6 @@ public class AgentStation extends Agent
 			vehicles.add(temp);
 			//temp = new Vehicle("bici");
 			//vehicles.add(temp);
-
 			//Creamos el mapa de estaciones
 			stations.put("StationB", 20);
 			stations.put("StationC", 22);
@@ -173,8 +172,9 @@ public class AgentStation extends Agent
 		
 		for (Vehicle v : this.vehicles) 
 		{
+			
 			if(v.isReserved() == false && v.getType().equals(vehicleRequestType))
-			{
+			{			
 				vehicleToRemove = v;
 				found = true;
 				break;

@@ -68,6 +68,8 @@ public class AgentUser extends Agent {
 		//Anadimos los servicios registrados
 		dfd.addServices(sd);
 		
+	
+		
 		try
 		{
 			//registro los servicios
@@ -90,7 +92,7 @@ public class AgentUser extends Agent {
 			this.stablishCurrentStation("StationA");
 			this.stablishDesiredStation("StationB");
 			this.stablishDestinationStation("StationB");
-			this.stablishDesiredVehicle("bici");
+			this.stablishDesiredVehicle("patin");
 		}
 		
 		if(getLocalName().equals("User2"))
@@ -153,6 +155,14 @@ public class AgentUser extends Agent {
 			this.stablishDesiredVehicle("bici");
 		}
 		
+		try
+		{
+			//registro los servicios
+			DFService.register(this,dfd);
+		}
+		catch(FIPAException e){
+			System.err.println("Agent "+getLocalName() +": " + e.getMessage());
+		}
 		
 		cyclicBehaviourUser = new CyclicBehaviourUser(this);
 		this.addBehaviour(cyclicBehaviourUser);
@@ -261,7 +271,7 @@ public class AgentUser extends Agent {
 	{
 		this.waitSomeTime(2000);
 		this.currentStation = this.destinationStation;
-		this.destinationStation = null;
+		//this.destinationStation = null;
 	}
 //
 

@@ -42,8 +42,8 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 		if(this.user.arrivedToFinalStation())
 		{
 			System.out.println("I, " + this.user.getLocalName() + " arrived to Final station. ");
-			this.user.stablishDesiredVehicle();
-			this.user.stablishDesiredStation();
+			//this.user.stablishDesiredVehicle();
+			//this.user.stablishDesiredStation();
 			System.out.println("Now, " + this.user.getLocalName() + " now i want to go to " + this.user.getDesiredStation() + " by " + this.user.desiredVehicle);
 
 		}
@@ -56,7 +56,10 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 		//temporal
 		
 		//realiza peticion
-		this.msgObject = new Capsule(null,"bici",this.user.getDesiredStation(),null);
+		this.msgObject = new Capsule(null,this.user.desiredVehicle,this.user.getDesiredStation(),null);
+		
+		this.user.stablishDestinationStation(this.user.getDesiredStation());
+		
 		Utils.enviarMensaje(myAgent, this.user.getCurrentStation(), this.msgObject, "pedirVehiculo");
 		System.out.println("I " + this.user.getLocalName() + " realiced a petition to " + this.user.getCurrentStation());
 		
@@ -79,6 +82,7 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 			case "entregaVehiculo":
 				//obtiene el vehiculo
 				this.user.takeVehicle(msgObject.getVehicle());
+				
 				
 				System.out.println("I recived " +this.user.vehicle.getType());
 				
