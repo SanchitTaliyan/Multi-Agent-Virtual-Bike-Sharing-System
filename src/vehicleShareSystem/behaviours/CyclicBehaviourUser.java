@@ -38,31 +38,21 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 	@Override
 	public void action() 
 	{
-		//System.out.println(this.user.getDesiredStation() + " " + this.user.currentStation);
 		if(this.user.arrivedToFinalStation())
 		{
-			System.out.println("I, " + this.user.getLocalName() + " arrived to Final station. ");
-			//this.user.stablishDesiredVehicle();
-			//this.user.stablishDesiredStation();
-			System.out.println("Now, " + this.user.getLocalName() + " now i want to go to " + this.user.getDesiredStation() + " by " + this.user.desiredVehicle);
-
-		}
-		else 
-		{
-			System.out.println("I'm " + this.user.getLocalName() + " Im on " + this.user.currentStation + " and I want to go to " + this.user.desiredStation + " by " + this.user.desiredVehicle);
+			this.user.stablishDesiredVehicle();
+			this.user.stablishDesiredStation();
 		}
 		
-		this.mensaje=scanner.nextLine();
+		//Temporal
+		System.out.println("\nI'm " + this.user.getLocalName() + ": I'm on " + this.user.getCurrentStation() + " and I want to go to " + this.user.desiredStation + " by " + this.user.desiredVehicle +"\n");
+		//this.mensaje=scanner.nextLine();
 		//temporal
 		
 		//realiza peticion
-		this.msgObject = new Capsule(null,this.user.desiredVehicle,this.user.getDesiredStation(),null);
-		
-		this.user.stablishDestinationStation(this.user.getDesiredStation());
-		
+		System.out.println("I realiced a petition to " + this.user.getCurrentStation() + ": I'm on " + this.user.getCurrentStation() + " and I want to go to " + this.user.desiredStation + " by " + this.user.desiredVehicle);
+		this.msgObject = new Capsule(null,this.user.getDesiredVehicle(),this.user.getDesiredStation(),null);
 		Utils.enviarMensaje(myAgent, this.user.getCurrentStation(), this.msgObject, "pedirVehiculo");
-		System.out.println("I " + this.user.getLocalName() + " realiced a petition to " + this.user.getCurrentStation());
-		
 		
 		// Receive the message
 		ACLMessage msg=this.myAgent.blockingReceive(
@@ -70,21 +60,18 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 						MessageTemplate.MatchPerformative(ACLMessage.REQUEST), 
 						MessageTemplate.MatchOntology("ontologia"))
 				);
+		
 		try
 		{
 			this.comment = msg.getEnvelope().getComments();
 			this.msgObject = (Capsule) msg.getContentObject();
+			System.out.println("\t" + this.user.getCurrentStation() + " told me " + this.comment + ". ");
 			
-			System.out.println("The station " + msg.getSender().getLocalName() + " said " + this.comment);
-
 			switch(this.comment)
 			{
 			case "entregaVehiculo":
 				//obtiene el vehiculo
 				this.user.takeVehicle(msgObject.getVehicle());
-				
-				
-				System.out.println("I recived " +this.user.vehicle.getType());
 				
 				//dirigirseAParada
 				this.user.goToStation();
@@ -99,14 +86,20 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 				break;
 				
 			case "pedidoNoSatisfacotrio":
-				if(msgObject.getStation() != null)	//Si hay una parada alternativa con reserva, la marcamos
+				if(msgObject.getStation() != null) {	//Si hay una parada alternativa con reserva, la marcamos
+					System.out.println("\t"+this.user.getCurrentStation() + " told me that there's an alternative route -> " + msgObject.getStation() + ". ");
 					this.user.stablishDestinationStation(msgObject.getStation());
-				if(msgObject.getVehicle() != null) //si hay vehiculo alternativo
+				}
+				if(msgObject.getVehicle() != null) { //si hay vehiculo alternativo
+					System.out.println("\t"+this.user.getCurrentStation() + " gived to me an alternative vehicle -> " + msgObject.getVehicle().getType() + ". ");
 					this.user.takeVehicle(msgObject.getVehicle());
+				} else {
+					System.out.println("\tI have to go walking. ");
+				}
 				
 				//dirigirseAParada
 				this.user.goToStation();
-				
+
 				//Si tiene vehiculo, lo deja
 				if(this.user.hasVehicle()) 
 				{

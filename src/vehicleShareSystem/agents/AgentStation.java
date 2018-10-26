@@ -71,10 +71,11 @@ public class AgentStation extends Agent
 			vehicles.add(temp);
 			//temp = new Vehicle("bici");
 			//vehicles.add(temp);
+
 			//Creamos el mapa de estaciones
 			stations.put("StationB", 20);
 			stations.put("StationC", 22);
-			stations.put("StationD", 5);
+			stations.put("StationD", 5); //5
 			
 			//Podemos obtener el mapa de estaciones, pero es dinámico
 			stationNames = stations.keys();
@@ -172,9 +173,8 @@ public class AgentStation extends Agent
 		
 		for (Vehicle v : this.vehicles) 
 		{
-			
 			if(v.isReserved() == false && v.getType().equals(vehicleRequestType))
-			{			
+			{
 				vehicleToRemove = v;
 				found = true;
 				break;
@@ -235,19 +235,31 @@ public class AgentStation extends Agent
 		this.vehicles.add(vehicle);
 	}
 	
+	public String listOfVehicles()
+	{
+		String vehicleString = "[";
+		
+		for (Vehicle v : this.vehicles) 
+		{
+			vehicleString = vehicleString + " " + v.getType() + " ";
+		}
+		vehicleString = vehicleString + "]";
+		
+		return vehicleString;
+	}
+	
 	public boolean reserveVehicle(String user, String vehicleType)
 	{
-		
+		boolean isReserved = false;
 		for (Vehicle v : this.vehicles) 
 		{
 			if(v.isReserved() == false && v.getType().equals(vehicleType))
 			{
-				
+				isReserved = true;
 				v.stablishReserve(user);
-				return true;
 			}
 		}	
-		return false;
+		return isReserved;
 	}
 // Operaciones Vehiculos
 	

@@ -23,22 +23,20 @@ public class AgentUser extends Agent {
 	
 	public Vehicle vehicle;
 	public String desiredVehicle;
-	public ArrayList<String> vehicles;
 	
 	public String currentStation;
 	public String destinationStation;
 	public String desiredStation;
 	
 	public ArrayList<String> stations;
+	public ArrayList<String> vehicles;
 	
 	protected CyclicBehaviourUser cyclicBehaviourUser;
 	
 	
 	public void setup() 
 	{
-		vehicles = new ArrayList<String>();
-		vehicles.add("bici");
-		vehicles.add("patin");
+		System.out.println("SETUP!!\n\n");
 		
 		stations = new ArrayList<String>();
 		stations.add("StationA");
@@ -46,6 +44,9 @@ public class AgentUser extends Agent {
 		stations.add("StationC");
 		stations.add("StationD");
 		
+		vehicles = new ArrayList<String>();
+		vehicles.add("bici");
+		vehicles.add("patin");
 		
 		this.vehicle = null;
 		
@@ -68,18 +69,6 @@ public class AgentUser extends Agent {
 		//Anadimos los servicios registrados
 		dfd.addServices(sd);
 		
-	
-		
-		try
-		{
-			//registro los servicios
-			DFService.register(this,dfd);
-		}
-		catch(FIPAException e){
-			System.err.println("Agent "+getLocalName() +": " + e.getMessage());
-			//doDelete();
-		}
-
 		if(getLocalName().equals("User1"))
 		{
 			sd = new ServiceDescription();
@@ -92,7 +81,7 @@ public class AgentUser extends Agent {
 			this.stablishCurrentStation("StationA");
 			this.stablishDesiredStation("StationB");
 			this.stablishDestinationStation("StationB");
-			this.stablishDesiredVehicle("patin");
+			this.stablishDesiredVehicle("bici");
 		}
 		
 		if(getLocalName().equals("User2"))
@@ -155,6 +144,7 @@ public class AgentUser extends Agent {
 			this.stablishDesiredVehicle("bici");
 		}
 		
+		
 		try
 		{
 			//registro los servicios
@@ -162,8 +152,9 @@ public class AgentUser extends Agent {
 		}
 		catch(FIPAException e){
 			System.err.println("Agent "+getLocalName() +": " + e.getMessage());
+			//doDelete();
 		}
-		
+
 		cyclicBehaviourUser = new CyclicBehaviourUser(this);
 		this.addBehaviour(cyclicBehaviourUser);
 	}
@@ -175,14 +166,6 @@ public class AgentUser extends Agent {
 		this.currentStation = currentStation;
 	}
 	
-	public void stablishCurrentStation()
-	{
-		Random rand = new Random();
-		int index = rand.nextInt(stations.size());
-		
-		this.currentStation = stations.get(index);
-	}
-	
 	public void stablishDestinationStation(String destinationStation)
 	{
 		this.destinationStation = destinationStation;
@@ -190,10 +173,23 @@ public class AgentUser extends Agent {
 	
 	public void stablishDesiredStation()
 	{
-		Random rand = new Random();
-		int index = rand.nextInt(stations.size());
+		int actualNStation = 0;
+		for (String e : this.stations) 
+		{
+			if(e.equals(this.currentStation))
+				break;
+			actualNStation++;
+		}
 		
-		this.desiredStation = stations.get(index);
+		Random r = new Random(System.currentTimeMillis());
+		int nStation;
+		
+		do {
+			nStation = r.nextInt(this.stations.size());
+		} while (nStation == actualNStation);
+		
+		this.desiredStation = this.stations.get(nStation);
+		this.destinationStation = this.desiredStation;
 	}
 	
 	public void stablishDesiredStation(String desiredStation)
@@ -211,10 +207,17 @@ public class AgentUser extends Agent {
 		return this.currentStation;
 	}
 	
+	public String getDestinationStation()
+	{
+		return this.destinationStation;
+	}
+	
 	public boolean arrivedToFinalStation()
 	{
-		if(this.desiredStation.equals(this.currentStation))
+		if(this.desiredStation.equals(this.currentStation)){
+			System.out.println("!#!\tI arrived to Final station: " + this.getCurrentStation()+ ". \n");
 			return true;
+		}
 		else
 			return false;
 	}
@@ -228,10 +231,31 @@ public class AgentUser extends Agent {
 	
 	public void stablishDesiredVehicle()
 	{
-		Random rand = new Random();
-		int index = rand.nextInt(vehicles.size());
+		int actualNVehicle = 0;
+		if(this.vehicle == null) {
+			actualNVehicle = this.vehicles.size() + 1; 
+		} else {
+			for (String v : this.vehicles) 
+			{
+				if( v.equals(this.vehicle.getType()))
+					break;
+				actualNVehicle++;
+			}
+		}
+
+		Random r = new Random(System.currentTimeMillis());
+		int nVehicle;
 		
-		this.desiredStation = vehicles.get(index);
+		do {
+			nVehicle = r.nextInt(this.vehicles.size());
+		} while (nVehicle == actualNVehicle);
+
+		this.desiredVehicle = this.vehicles.get(nVehicle);
+	}
+	
+	public String getDesiredVehicle()
+	{
+		return this.desiredVehicle;
 	}
 	
 	public boolean hasVehicle()
@@ -246,10 +270,17 @@ public class AgentUser extends Agent {
 	{
 		this.vehicle = vehicle;
 		this.vehicle.stablishReserve("none");
+		System.out.println("\tI recived " + this.vehicle.getType());
+	}
+	
+	public String getVehicleName()
+	{
+		return this.vehicle.getType();
 	}
 	
 	public Vehicle leaveVehicle()
 	{
+		System.out.println("\tI'm at "+ this.getCurrentStation()  +" and I leave the "+ this.vehicle.getType()+ ". ");
 		Vehicle aux = this.vehicle;
 		this.vehicle = null;
 		return aux;
@@ -269,9 +300,10 @@ public class AgentUser extends Agent {
 	
 	public void goToStation()
 	{
+		System.out.println("\t"+this.getCurrentStation() + " -------"+this.getVehicleName()+"--------> " + this.getDestinationStation()  + ". ");
 		this.waitSomeTime(2000);
 		this.currentStation = this.destinationStation;
-		//this.destinationStation = null;
+		this.destinationStation = this.desiredStation;
 	}
 //
 
