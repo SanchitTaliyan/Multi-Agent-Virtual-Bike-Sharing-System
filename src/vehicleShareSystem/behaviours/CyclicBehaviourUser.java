@@ -32,6 +32,8 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 		
 		this.user = agent;
 		scanner=new Scanner(System.in);
+		this.mensaje=scanner.nextLine();
+
 	}
 	
 	
@@ -71,18 +73,25 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 			{
 			case "entregaVehiculo":
 				//obtiene el vehiculo
-				this.user.takeVehicle(msgObject.getVehicle());
+				if(msgObject.getVehicle() != null) {
+					this.user.takeVehicle(msgObject.getVehicle());
+				}
 				
 				//dirigirseAParada
+				this.notifyMonitor("moving");
 				this.user.goToStation();
-				
+				this.notifyMonitor("waiting");
+
 				//devuelve el vehiculo
-				this.vehicleTemp = this.user.leaveVehicle();
-				msgObject = new Capsule(this.vehicleTemp,null, null, null);
-				Utils.enviarMensaje(myAgent, this.user.getCurrentStation(), this.msgObject, "entregaVehiculo");
+				if(this.user.hasVehicle())
+				{
+					this.vehicleTemp = this.user.leaveVehicle();
+					msgObject = new Capsule(this.vehicleTemp,null, null, null);
+					Utils.enviarMensaje(myAgent, this.user.getCurrentStation(), this.msgObject, "entregaVehiculo");
+				}
 
 				//espera
-				this.user.waitSomeTime(2000);
+				this.user.waitSomeTime(8000);
 				break;
 				
 			case "pedidoNoSatisfacotrio":
@@ -98,7 +107,9 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 				}
 				
 				//dirigirseAParada
+				this.notifyMonitor("moving");
 				this.user.goToStation();
+				this.notifyMonitor("waiting");
 
 				//Si tiene vehiculo, lo deja
 				if(this.user.hasVehicle()) 
@@ -109,13 +120,29 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 					Utils.enviarMensaje(myAgent, this.user.getCurrentStation(), this.msgObject, "entregaVehiculo");
 				}
 				
-				this.user.waitSomeTime(2000);
+				this.user.waitSomeTime(8000);
 			}
 		}
 		catch (UnreadableException e)
 		{
-		// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public void notifyMonitor(String action)
+	{
+		String msg;
+		switch(action)
+		{
+		case "moving":
+			msg = this.user.getVehicleName() +"\t"+ this.user.currentStation + "-->" + this.user.destinationStation;
+			Utils.enviarMensaje(myAgent, "Monitor", msg, "userStatusNotification");
+			break;
+			
+		case "waiting":
+			msg ="waiting";
+			Utils.enviarMensaje(myAgent, "Monitor", msg, "userStatusNotification");
+			break;
 		}
 	}
 }

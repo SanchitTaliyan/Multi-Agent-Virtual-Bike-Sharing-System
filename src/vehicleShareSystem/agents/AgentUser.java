@@ -275,7 +275,10 @@ public class AgentUser extends Agent {
 	
 	public String getVehicleName()
 	{
-		return this.vehicle.getType();
+		if(this.vehicle != null)
+			return this.vehicle.getType();
+		else
+			return "walking";
 	}
 	
 	public Vehicle leaveVehicle()
@@ -300,8 +303,12 @@ public class AgentUser extends Agent {
 	
 	public void goToStation()
 	{
-		System.out.println("\t"+this.getCurrentStation() + " -------"+this.getVehicleName()+"--------> " + this.getDestinationStation()  + ". ");
-		this.waitSomeTime(2000);
+		if(this.hasVehicle())
+			System.out.println("\t"+this.getCurrentStation() + " -------"+this.getVehicleName()+"--------> " + this.getDestinationStation()  + ". ");
+		else
+			System.out.println("\t"+this.getCurrentStation() + " -------walking--------> " + this.getDestinationStation()  + ". ");
+
+		this.waitSomeTime(12000);
 		this.currentStation = this.destinationStation;
 		this.destinationStation = this.desiredStation;
 	}

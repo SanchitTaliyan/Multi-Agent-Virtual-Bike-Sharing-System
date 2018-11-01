@@ -35,6 +35,8 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 	public void action() 
 	{
 		System.out.println("\n" + this.station.getLocalName() + ": " + this.station.listOfVehicles());
+		this.notifyMonitor();
+
 		// Receive the message
 		msg=this.myAgent.blockingReceive(
 				MessageTemplate.and(
@@ -49,7 +51,7 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 			
 			this.msgObject = (Capsule) msg.getContentObject();
 			System.out.println("[ " + sender + "] " + this.comment + ": ");
-
+			
 			switch(this.comment)
 			{
 			case "pedirVehiculo":	//Un usuario pide: //object -> Capsule - string con tipo vehiculoPedido y string paradaDeseada				
@@ -178,5 +180,11 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 		// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void notifyMonitor()
+	{
+		Utils.enviarMensaje(myAgent, "Monitor", this.station.listOfVehicles(), "stationStatusNotification");
+
 	}
 }
