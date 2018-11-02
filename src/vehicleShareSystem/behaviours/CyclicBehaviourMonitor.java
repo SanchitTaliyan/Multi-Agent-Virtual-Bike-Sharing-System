@@ -39,6 +39,7 @@ public class CyclicBehaviourMonitor extends CyclicBehaviour
 	public void action() 
 	{
 		this.monitor.printMonitorText();
+		this.monitor.printMonitorMap();
 
 		// Receive the message
 		msg=this.myAgent.blockingReceive(

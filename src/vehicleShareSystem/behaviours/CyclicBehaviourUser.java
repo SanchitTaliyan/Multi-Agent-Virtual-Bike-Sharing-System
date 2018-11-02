@@ -32,7 +32,7 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 		
 		this.user = agent;
 		scanner=new Scanner(System.in);
-		this.mensaje=scanner.nextLine();
+		//this.mensaje=scanner.nextLine();
 
 	}
 	
@@ -120,7 +120,7 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 					Utils.enviarMensaje(myAgent, this.user.getCurrentStation(), this.msgObject, "entregaVehiculo");
 				}
 				
-				this.user.waitSomeTime(8000);
+				this.user.waitSomeTime(4000);
 			}
 		}
 		catch (UnreadableException e)
@@ -135,12 +135,12 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 		switch(action)
 		{
 		case "moving":
-			msg = this.user.getVehicleName() +"\t"+ this.user.currentStation + "-->" + this.user.destinationStation;
+			msg = "moving " + this.user.currentStation + " " + this.user.destinationStation + " " + this.user.getVehicleName();
 			Utils.enviarMensaje(myAgent, "Monitor", msg, "userStatusNotification");
 			break;
 			
 		case "waiting":
-			msg ="waiting";
+			msg = "waiting" + " "+ this.user.currentStation;
 			Utils.enviarMensaje(myAgent, "Monitor", msg, "userStatusNotification");
 			break;
 		}
