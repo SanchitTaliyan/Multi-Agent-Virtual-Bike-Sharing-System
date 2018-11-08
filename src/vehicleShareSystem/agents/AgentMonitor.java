@@ -28,6 +28,13 @@ public class AgentMonitor extends Agent
 	public ArrayList<String> stations;
 	public ArrayList<String> stationVehicles;
 	
+	public ArrayList<String> AB;
+	public ArrayList<String> BD;
+	public ArrayList<String> DC;
+	public ArrayList<String> CA;
+	public ArrayList<String> AD;
+	public ArrayList<String> CB;
+
 	
 	public ArrayList<String> users;
 	public ArrayList<String> userVehicle;
@@ -54,10 +61,49 @@ public class AgentMonitor extends Agent
 		stationVehicles.add(" [ ] ");
 		stationVehicles.add(" [ ] ");
 		stationVehicles.add(" [ ] ");
-			
+
+		AB = new ArrayList<String>();
+		AB.add("--");
+		AB.add("--");
+		AB.add("--");
+		AB.add("--");
+		AB.add("--");
+
+		BD = new ArrayList<String>();
+		BD.add("| ");
+		BD.add("| ");
+		BD.add("| ");
+		BD.add("| ");
+		BD.add("| ");
 		
+		DC = new ArrayList<String>();
+		DC.add("--");
+		DC.add("--");
+		DC.add("--");
+		DC.add("--");
+		DC.add("--");
 		
+		CA = new ArrayList<String>();
+		CA.add("| ");
+		CA.add("| ");
+		CA.add("| ");
+		CA.add("| ");
+		CA.add("| ");
 		
+		AD = new ArrayList<String>();
+		AD.add(" _");
+		AD.add(" _");
+		AD.add(" _");
+		AD.add(" _");
+		AD.add(" _");
+		
+		CB = new ArrayList<String>();
+		CB.add(" _");
+		CB.add(" _");
+		CB.add(" _");
+		CB.add(" _");
+		CB.add(" _");
+				
 		users = new ArrayList<String>();
 		users.add("User1");
 		users.add("User2");
@@ -101,6 +147,13 @@ public class AgentMonitor extends Agent
 		userSituation.add("");
 		userSituation.add("");
 		userSituation.add("");
+		
+		cleanWays("User1");
+		cleanWays("User1");
+		cleanWays("User1");
+		cleanWays("User1");
+		cleanWays("User1");
+
 		
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(this.getAID());
@@ -161,16 +214,16 @@ public class AgentMonitor extends Agent
 
 		String buffer = "\n" +
 				stationVehicles.get(0)+" Users: " + stationUsers.get(0) + "\n"+
-				"A------------------------------B "+ stationVehicles.get(1)+" Users: "+stationUsers.get(1)+"\n"+
+				"A---------"+AB.get(0)+"-"+AB.get(1)+"-"+AB.get(2)+"-"+AB.get(3)+"-"+AB.get(4)+"-------B "+ stationVehicles.get(1)+" Users: "+stationUsers.get(1)+"\n"+
 				"|\\ _                       _ / |\n"+
-				"|    \\ _               _ /     |\n"+
-				"|        \\ _       _ /         |\n"+
-				"|            \\ _ /             |\n"+
-				"|          _ /   \\ _           |\n"+
-				"|       _/           \\ _       |\n"+
-				"|   _ /                  \\ _   |\n"+
+				"|    \\"+AD.get(0)+"               "+CB.get(4)+"/     |\n"+
+				CA.get(0)+"       \\"+AD.get(1)+"       "+CB.get(3)+"/         "+BD.get(0)+"\n"+
+				CA.get(1)+"           \\ _ /             "+BD.get(1)+"\n"+
+				CA.get(2)+"        "+CB.get(2)+" /   \\"+AD.get(2)+"           "+BD.get(2)+"\n"+
+				CA.get(3)+"     "+CB.get(1)+"/           \\"+AD.get(3)+"       "+BD.get(3)+"\n"+
+				CA.get(4)+"  "+CB.get(0)+"/                  \\"+AD.get(4)+"   "+BD.get(4)+"\n"+
 				"| /                          \\ |\n"+
-				"C------------------------------D " + stationVehicles.get(3)+" Users: "+stationUsers.get(3)+"\n"+
+				"C--------"+DC.get(0)+"-"+DC.get(1)+"-"+DC.get(2)+"-"+DC.get(3)+"-"+DC.get(4)+"--------D " + stationVehicles.get(3)+" Users: "+stationUsers.get(3)+"\n"+
 				stationVehicles.get(2)+" Users: "+stationUsers.get(2)+"\n";
 		
 		System.out.println(buffer);
@@ -208,15 +261,49 @@ public class AgentMonitor extends Agent
 			i++;
 		}
 	}
-
-	/*public ArrayList<String> stationUsers;
 	
-	public ArrayList<String> users;
-	public ArrayList<String> userVehicle;
-	public ArrayList<String> currentStation;
-	public ArrayList<String> destinationStation;*/
+	public void refreshUser(String user, String situation)
+	{
+		String currentStation;
+		String destinationStation;
+		String vehicleType;
+		String userName = user;
+		
+		String[] userInfo = situation.split(" ");
+		for (int i = 0; i<userInfo.length;i++) 
+		{
+			System.out.println(userInfo[i]);
+		}
+		
+		if(userInfo[0].equals("waiting") || userInfo[0].equals("final")) {
+			currentStation = userInfo[1];
+			this.placeUserOnStation(user,currentStation);
+			situation = currentStation + "\t\t" + userInfo[0];
+		} 
+		
+		if(userInfo[0].equals("moving")) {
+			currentStation = userInfo[1];
+			destinationStation = userInfo[2];
+			vehicleType = userInfo[3];
+			this.placeUserOnStation(user,"");
+			this.placeUserOnTheWay(userName, currentStation, destinationStation, vehicleType);
+			situation = currentStation + " --> " + destinationStation + "\t" + vehicleType;
+		}
+		
+		int i = 0;
+		for (String u : this.users) 
+		{
+			if(u.equals(user)) {
+				this.userSituation.set(i, situation);
+				break;
+			}
+			i++;
+		}
+	}
+
 	public void placeUserOnStation(String user, String currentStation)
 	{
+		this.cleanWays(user);
 		int i = 0;
 		for (String u : this.users) 
 		{
@@ -232,39 +319,61 @@ public class AgentMonitor extends Agent
 		}
 	}
 	
-	public void refreshUser(String user, String situation)
+	public void cleanWays(String user)
 	{
-		String currentStation;
-		String destinationStation;
-		String vehicleType;
-		String userName = user;
-		
-		String[] userInfo = situation.split(" ");
-		for (int i = 0; i<userInfo.length;i++) 
-		{
-			System.out.println(userInfo[i]);
-		}
-		
-		if(userInfo[0].equals("waiting")) {
-			currentStation = userInfo[1];
-			this.placeUserOnStation(user,currentStation);
-			situation = currentStation + "\t\t" + "waiting";
-		} 
-		
-		if(userInfo[0].equals("moving")) {
-			currentStation = userInfo[1];
-			destinationStation = userInfo[2];
-			vehicleType = userInfo[3];
-			this.placeUserOnStation(user,"");
-
-			situation = currentStation + " --> " + destinationStation + "\t" + vehicleType;
-		}
-		
 		int i = 0;
 		for (String u : this.users) 
 		{
 			if(u.equals(user)) {
-				this.userSituation.set(i, situation);
+				this.AB.set(i, "--");
+				this.BD.set(i, "| ");
+				this.DC.set(i, "--");
+				this.CA.set(i, "| ");
+				this.AD.set(i, " _");
+				this.CB.set(i, " _");
+				break;
+			}
+			i++;
+		}
+	}
+	public void placeUserOnTheWay(String user,String currentStation,String destinationStation,String vehicleType)
+	{
+		this.cleanWays(user);
+
+		int i = 0;
+		for (String u : this.users) 
+		{
+			if(u.equals(user)) {				
+				String vehicle = " ";
+				if(vehicleType.equals("bici")) vehicle = "b";
+				if(vehicleType.equals("patin")) vehicle = "p";
+
+				switch(currentStation+destinationStation) {
+					case "StationAStationB":
+					case "StationBStationA":
+						this.AB.set(i, Integer.toString(i+1)+vehicle );
+						break;
+					case "StationBStationD":
+					case "StationDStationB":
+						this.BD.set(i, Integer.toString(i+1)+vehicle );
+						break;
+					case "StationDStationC":
+					case "StationCStationD":
+						this.DC.set(i, Integer.toString(i+1)+vehicle );
+						break;
+					case "StationCStationA":
+					case "StationAStationC":
+						this.CA.set(i, Integer.toString(i+1)+vehicle );
+						break;
+					case "StationAStationD":
+					case "StationDStationA":
+						this.AD.set(i, Integer.toString(i+1)+vehicle );
+						break;
+					case "StationCStationB":
+					case "StationBStationC":
+						this.CB.set(i, Integer.toString(i+1)+vehicle );
+						break;
+				}
 				break;
 			}
 			i++;

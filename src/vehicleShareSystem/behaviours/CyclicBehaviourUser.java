@@ -140,7 +140,10 @@ public class CyclicBehaviourUser extends CyclicBehaviour
 			break;
 			
 		case "waiting":
-			msg = "waiting" + " "+ this.user.currentStation;
+			if(this.user.arrivedToFinalStation()) 
+				msg = "final" + " "+ this.user.currentStation;
+			else 
+				msg = "waiting" + " "+ this.user.currentStation;
 			Utils.enviarMensaje(myAgent, "Monitor", msg, "userStatusNotification");
 			break;
 		}
