@@ -1,5 +1,7 @@
 # Multi-Agent-Virtual-Bike-Sharing-System
 
+A multi-agent system that allows the instance of a network of vehicle stations and autonomous users that navigate freely through it.
+
 ### Prerequisites
 This project has been carried out through the platform for the development of JADE agents. This software is contained in this repository. The development and implementation was carried out on the Eclipse platform, this guide assumes its use.
 
@@ -33,3 +35,14 @@ Once this is done, we can instantiate the other agents:
     -main false -host 127.0.0.1 User4:vehicleShareSystem.agents.AgentUser
     -main false -host 127.0.0.1 User5:vehicleShareSystem.agents.AgentUser
 ```
+
+
+## Authors
+
+* **Adrián Valera Román** - *Architecture designer and main programmer* - [Adrixo](https://github.com/adrixo)
+* **Diego Mateos Matilla** - *Architecture designer, bug resolver and tester* 
+
+## Acknowledgments
+
+We would like to thank our programming teacher who introduced us to the world of agents:
+* Dr. Juan Manuel Corchado - [website](https://corchado.net/)
