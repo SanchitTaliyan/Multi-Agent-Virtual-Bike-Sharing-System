@@ -4,7 +4,8 @@ A multi-agent system that allows the instance of a network of vehicle stations a
 
 Running test video example:
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/zJhrfXbQmQU/0.jpg)](https://www.youtube.com/watch?v=zJhrfXbQmQU)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/zJhrfXbQmQU/0.jpg)](https://www.youtube.com/watch?v=zJhrfXbQmQU){ style="display: block; margin: 0 auto" }
+
 
 ## Index
 
