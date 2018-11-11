@@ -2,13 +2,16 @@
 
 A multi-agent system that allows the instance of a network of vehicle stations and autonomous users that navigate freely through it.
 
+Running test video example:
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/zJhrfXbQmQU/0.jpg)](https://www.youtube.com/watch?v=zJhrfXbQmQU)
+
 ## Index
 
-  - [Architecture](#Architecture and communication between agents)
+  - [Architecture](#Architecture)
   - [Prerequisites](#Prerequisites)
   - [Authors](#Authors)
 
-## Architecture and communication between agents ##
+## Architecture ##
 
 #### Objects and agents classes:
 ![Alt text](doc/classDiagram.png?raw=true "ClassDiagram")
