@@ -49,6 +49,22 @@ Each time an agent performs an action, it notifies the central monitor that mana
 
 ![Alt text](doc/communicationMonitor.png?raw=true "Comunication with monitor")
 
+**Messages:**
+- Monitor:
+	- Only receive *USERSTATUS_NOTIFICATION* and *STATIONSTATUS_NOTIFICATION* messages from users and stations
+
+- User: 
+	- **VEHICLE_REQUEST -> Station:** Capsule(null, desiredVehicle, currentStation, null)
+	- **VEHICLE_RETURN -> Station:** Capsule(Vehicle, null, null, null)
+	- **USERSTATUS_NOTIFICATION -> Monitor:** String("moving currentStation destinationStation vehicleType") or String("waiting|final currentStation")
+
+- Station:
+	- **VEHICLE_DELIVERY -> User:** Capsule(Vehicle, null, null, null)
+	- **UNSATISFACTORY_REQUEST -> User:** Capsule(vehicle,null,alternativeStation,null) //alternativeStation and/or vehicle can be null
+	- **VEHICLE_RESERVATION_REQUEST -> Station:** Capsule(null, desiredVehicle, askingStation , user requesting for a reservation)
+	- **VEHICLE_RESERVED -> Station:** void
+	- **VEHICLE_NOT_RESERVED -> Station:** void
+	- **STATIONSTATUS_NOTIFICATION -> Monitor:** string(List of vehicles) 
 
 ## Agents Behaviour:
 The agents, autonomous programmes of flexible, reactive, proactive and social behaviour, behave according to the cyclic behaviour described in the folder *./VirtualBikeSharingSystem/bin/vehicleShareSystem/behaviours/*
