@@ -11,43 +11,62 @@ Running test video example:
 
   - [Architecture](#Architecture)
   - [Prerequisites](#Prerequisites)
+  - [Problems](#Problems)
   - [Authors](#Authors)
+
 
 ## Architecture ##
 
-Proposed map:
+      Proposed map:
+
 ![Alt text](doc/Map.png?raw=true "ClassDiagram")
 
 The vehicle sharing service in a city consists of stops and vehicles in these. A system is developed in which several stations will form a network in a hypothetical city; each stop will be an autonomous agent.
+
 On the other hand we have users who use the service, who want to use the vehicles. These are also independent agents, who take the desired vehicles from the stations and move between them.
+
+As we will explain in the [problems section](#Problems), the monitor has a poor design and has not been included in this diagram because I don't want to give too much importance.
 
 #### Objects and agents classes:
 
+The main objective of the system is the handling of the object vehicle, by which the service that we raised exists; this one is sent between agents by means of messages. In the following image you can see the main classes that make up the system.
 
 ![Alt text](doc/classDiagram.png?raw=true "ClassDiagram")
 
 
+in addition there is a **capsule class** that packs both the vehicle and the various information transmitted by the agents (desired stations, users who wish to reserve a type of vehicle ...)
+
+
+
 #### Communication:
 
-Comunication between user/stations:
+- Comunication between user/stations:
+
 Users move freely on the map made up of stations, therefore they only communicate individually with the station in which they are. The station asked, trying to satisfy the request of a user, may try to communicate with nearby stations to reserve a vehicle.
+
 ![Alt text](doc/communicationUserStation.png?raw=true "Comunication between agents")
 
-Notifications to the monitor:
+- Notifications to the monitor:
+
 Each time an agent performs an action, it notifies the central monitor that manages information about all the agents that make up the ecosystem.
+
 ![Alt text](doc/communicationMonitor.png?raw=true "Comunication with monitor")
+
 
 #### Agents Behaviour:
 The agents, autonomous programmes of flexible, reactive, proactive and social behaviour, behave according to the cyclic behaviour described in the folder *./VirtualBikeSharingSystem/bin/vehicleShareSystem/behaviours/*
 The two main agents involved in the system have been programmed following the structure described in the following diagrams: 
 
 - **User behaviour:**
+
 ![Alt text](doc/userBehaviour.png?raw=true "User Behaviour")
 
 - **Station behaviour:**
+
 ![Alt text](doc/stationBehaviour.png?raw=true "Station Behaviour")
 
 As we see the redirection of messages is quite simple, a someone wanted to add a new functionality or behavior to an agent he could add a new case type, a new column in the diagram.
+
 
 ## Prerequisites ##
 This project has been carried out through the platform for the development of JADE agents. This software is contained in this repository. The development and implementation was carried out on the Eclipse platform, this guide assumes its use.
@@ -56,7 +75,7 @@ This project has been carried out through the platform for the development of JA
 
 #### How to compile and run tests:
 
-First of all you should run JADE within the main agent, on Eclipse go to "run configurations" -> "choose a java application" -> "pick jade.Boot as main class", after that insert as an argument:
+First of all you should run JADE within the main agent, on Eclipse go to "run configurations" -> "choose a java application" -> "pick jade.Boot as main class", after that insert as an argument this line:
 ```
    -gui Monitor:vehicleShareSystem.agents.AgentMonitor 
 ```
@@ -92,10 +111,16 @@ If all the agents run correctly on the main monitor we will see an operation lik
 In the same way each agent has its own internal dialogue, prompted in its own terminal:
 
 **StationA:**
+
 ![Alt text](doc/stationExample.png?raw=true "ClassDiagram")
 
 **User1:**
+
 ![Alt text](doc/userExample.png?raw=true "ClassDiagram")
+
+
+## Problems ## 
+
 
 ## Authors ## 
 
