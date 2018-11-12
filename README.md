@@ -17,7 +17,7 @@ Running test video example:
 
 ## Architecture ##
 
-      Proposed map:
+Proposed map:
 
 ![Alt text](doc/Map.png?raw=true "ClassDiagram")
 
@@ -25,9 +25,7 @@ The vehicle sharing service in a city consists of stops and vehicles in these. A
 
 On the other hand we have users who use the service, who want to use the vehicles. These are also independent agents, who take the desired vehicles from the stations and move between them.
 
-As we will explain in the [problems section](#Problems), the monitor has a poor design and has not been included in this diagram because I don't want to give too much importance.
-
-#### Objects and agents classes:
+### Objects and agents classes:
 
 The main objective of the system is the handling of the object vehicle, by which the service that we raised exists; this one is sent between agents by means of messages. In the following image you can see the main classes that make up the system.
 
@@ -36,24 +34,23 @@ The main objective of the system is the handling of the object vehicle, by which
 
 in addition there is a **capsule class** that packs both the vehicle and the various information transmitted by the agents (desired stations, users who wish to reserve a type of vehicle ...)
 
+As we will explain in the [problems section](#Problems), the monitor has a poor design and has not been included in this diagram because I don't want to give too much importance.
 
 
-#### Communication:
+## Communication:
 
-- Comunication between user/stations:
-
+**Comunication between user/stations:**
 Users move freely on the map made up of stations, therefore they only communicate individually with the station in which they are. The station asked, trying to satisfy the request of a user, may try to communicate with nearby stations to reserve a vehicle.
 
 ![Alt text](doc/communicationUserStation.png?raw=true "Comunication between agents")
 
-- Notifications to the monitor:
-
+**Notifications to the monitor:**
 Each time an agent performs an action, it notifies the central monitor that manages information about all the agents that make up the ecosystem.
 
 ![Alt text](doc/communicationMonitor.png?raw=true "Comunication with monitor")
 
 
-#### Agents Behaviour:
+## Agents Behaviour:
 The agents, autonomous programmes of flexible, reactive, proactive and social behaviour, behave according to the cyclic behaviour described in the folder *./VirtualBikeSharingSystem/bin/vehicleShareSystem/behaviours/*
 The two main agents involved in the system have been programmed following the structure described in the following diagrams: 
 
@@ -121,6 +118,10 @@ In the same way each agent has its own internal dialogue, prompted in its own te
 
 ## Problems ## 
 
+the monitor agent has a bad design. It was not conceived as something fundamental in the bicycle sharing system but was added later to facilitate the understanding of the operation of the agents.
+
+Although it works, the code is a western spaghetti and does not have to be taken too seriously. A modification or an attempt to add some new functionality can be an arduous task, the best would be to change the system with which the information is displayed.
+
 
 ## Authors ## 
 
@@ -131,3 +132,8 @@ In the same way each agent has its own internal dialogue, prompted in its own te
 
 We would like to thank our programming teacher who introduced us to the world of agents:
 * Dr. Juan Manuel Corchado - [website](https://corchado.net/)
+
+
+
+
+Developed with java language in eclipse.
