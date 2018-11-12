@@ -4,7 +4,7 @@ A multi-agent system that allows the instance of a network of vehicle stations a
 
 Running test video example:
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/zJhrfXbQmQU/0.jpg)](https://www.youtube.com/watch?v=zJhrfXbQmQU){ style="display: block; margin: 0 auto" }
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/zJhrfXbQmQU/0.jpg)](https://www.youtube.com/watch?v=zJhrfXbQmQU)
 
 
 ## Index
@@ -15,16 +15,39 @@ Running test video example:
 
 ## Architecture ##
 
+Proposed map:
+![Alt text](doc/Map.png?raw=true "ClassDiagram")
+
+The vehicle sharing service in a city consists of stops and vehicles in these. A system is developed in which several stations will form a network in a hypothetical city; each stop will be an autonomous agent.
+On the other hand we have users who use the service, who want to use the vehicles. These are also independent agents, who take the desired vehicles from the stations and move between them.
+
 #### Objects and agents classes:
+
+
 ![Alt text](doc/classDiagram.png?raw=true "ClassDiagram")
 
+
 #### Communication:
+
+Comunication between user/stations:
+Users move freely on the map made up of stations, therefore they only communicate individually with the station in which they are. The station asked, trying to satisfy the request of a user, may try to communicate with nearby stations to reserve a vehicle.
 ![Alt text](doc/communicationUserStation.png?raw=true "Comunication between agents")
+
+Notifications to the monitor:
+Each time an agent performs an action, it notifies the central monitor that manages information about all the agents that make up the ecosystem.
 ![Alt text](doc/communicationMonitor.png?raw=true "Comunication with monitor")
 
 #### Agents Behaviour:
+The agents, autonomous programmes of flexible, reactive, proactive and social behaviour, behave according to the cyclic behaviour described in the folder *./VirtualBikeSharingSystem/bin/vehicleShareSystem/behaviours/*
+The two main agents involved in the system have been programmed following the structure described in the following diagrams: 
+
+- **User behaviour:**
 ![Alt text](doc/userBehaviour.png?raw=true "User Behaviour")
+
+- **Station behaviour:**
 ![Alt text](doc/stationBehaviour.png?raw=true "Station Behaviour")
+
+As we see the redirection of messages is quite simple, a someone wanted to add a new functionality or behavior to an agent he could add a new case type, a new column in the diagram.
 
 ## Prerequisites ##
 This project has been carried out through the platform for the development of JADE agents. This software is contained in this repository. The development and implementation was carried out on the Eclipse platform, this guide assumes its use.
@@ -33,26 +56,27 @@ This project has been carried out through the platform for the development of JA
 
 #### How to compile and run tests:
 
-First of all you should run JADE within the main agent, on Eclipse go to "run configurations" -> "choose a java application" -> "pick jade.Boot as main class", after that go to Arguments and insert:
+First of all you should run JADE within the main agent, on Eclipse go to "run configurations" -> "choose a java application" -> "pick jade.Boot as main class", after that insert as an argument:
 ```
    -gui Monitor:vehicleShareSystem.agents.AgentMonitor 
 ```
 
-Once this is done, we can instantiate the other agents: 
+Once this is done, we can instantiate the other agents creating new configurations with diferent arguments: 
 ```
    -main false -host 127.0.0.1 **InstanceName**:vehicleShareSystem.agents.**AgentFile**
 ```
 
 ### Proposed instance
-The current configuration allows the instantiation of 4 stations and up to 5 different users, the code can be easily modified to add or modify the agents' disposition.
-**Stations**
+The current configuration allows the instantiation of 4 stations and up to 5 different users, the code can be easily modified to add stations/users or edit the agents' disposition.
+
+**Stations:**
 ```
     -main false -host 127.0.0.1 StationA:vehicleShareSystem.agents.AgentStation
     -main false -host 127.0.0.1 StationB:vehicleShareSystem.agents.AgentStation
     -main false -host 127.0.0.1 StationC:vehicleShareSystem.agents.AgentStation
     -main false -host 127.0.0.1 StationD:vehicleShareSystem.agents.AgentStation
 ```
-**Users**
+**Users:**
 ```
     -main false -host 127.0.0.1 User1:vehicleShareSystem.agents.AgentUser
     -main false -host 127.0.0.1 User2:vehicleShareSystem.agents.AgentUser
@@ -61,6 +85,17 @@ The current configuration allows the instantiation of 4 stations and up to 5 dif
     -main false -host 127.0.0.1 User5:vehicleShareSystem.agents.AgentUser
 ```
 
+If all the agents run correctly on the main monitor we will see an operation like this:
+
+![Alt text](doc/monitorExample.png?raw=true "ClassDiagram")
+
+In the same way each agent has its own internal dialogue, prompted in its own terminal:
+
+**StationA:**
+![Alt text](doc/stationExample.png?raw=true "ClassDiagram")
+
+**User1:**
+![Alt text](doc/userExample.png?raw=true "ClassDiagram")
 
 ## Authors ## 
 
