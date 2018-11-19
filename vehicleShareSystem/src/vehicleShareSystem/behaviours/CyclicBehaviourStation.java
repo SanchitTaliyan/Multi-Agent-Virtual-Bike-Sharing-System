@@ -61,7 +61,7 @@ public class CyclicBehaviourStation extends CyclicBehaviour
 				String userRequest = (String) msg.getSender().getLocalName();
 				String vehicleRequestType = msgObject.getVehicleType();
 				String desiredStation = msgObject.getStation();
-				System.out.println("\tPeticion de vehiculo: " + userRequest + " wants to go to " + desiredStation + " by " + vehicleRequestType);
+				System.out.println("\tVehicle request: " + userRequest + " wants to go to " + desiredStation + " by " + vehicleRequestType);
 
 				Vehicle vehicle;
 				String alternativeStation=null;
